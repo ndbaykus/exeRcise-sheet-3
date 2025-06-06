@@ -1,0 +1,26 @@
+---
+title: "2025-exeRcise-sheet-3"
+author: "Necati Deniz Baykus"
+date: "2025-06-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Übunsblatt 03
+
+### Necati Deniz Baykuş
+
+Matrikel-Nr.: 12764981
+
+Studiengang: Informatik
+
+### Aufgabe 1)
+
+#### d)
+
+PROS: Very hard to lose files, great for collaboration
+CONS: Takes up file space, doesn't work in the background
+
