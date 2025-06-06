@@ -135,3 +135,6 @@ ggplot(series_films, aes(x = series, y = rotten_tomatoes, fill = title_ordered))
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+A pattern is easily identifiable from the graph: The first films of the series have the best ratings or equally high ratings as the other highest rated film in the series.
+
