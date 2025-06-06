@@ -28,8 +28,110 @@ CONS: Takes up file space, doesn't work in the background
 ## Aufgabe 2)
 
 #### a)
-hhh
+
 
 #### b)
 
 
+## Aufgabe 3)
+
+
+#### a)
+
+```{r message=FALSE, warning=FALSE}
+pixar_films <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-03-11/pixar_films.csv')
+
+public_response <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-03-11/public_response.csv')
+```
+
+```{r message=FALSE, warning=FALSE}
+pixar_films_clean <- subset(pixar_films, !is.na(film) )
+
+unique(pixar_films_clean$film_rating)
+
+pixar_films_clean <- subset(pixar_films_clean,
+                            film_rating %in% c("G", "PG"))
+
+
+pixar_films_clean$film_rating <- factor(pixar_films_clean$film_rating,
+                                        levels = c("G", "PG"),
+                                        ordered = TRUE)
+
+```
+
+A factor is appropriate because film rating is a categorical subject. Assisgning a factor to it may help with further commands and analysis.
+
+#### b)
+```{r message=FALSE, warning=FALSE}
+
+print(pixar_films_clean$film)
+
+unique(pixar_films_clean$film)
+
+pixar_films_clean$series <- NA
+
+pixar_films_clean$series[grepl("Toy Story", pixar_films_clean$film)] <- "Toy Story"
+pixar_films_clean$series[grepl("Cars", pixar_films_clean$film)] <- "Cars"
+pixar_films_clean$series[grepl("Incredibles", pixar_films_clean$film)] <- "The Incredibles"
+pixar_films_clean$series[grepl("Finding", pixar_films_clean$film)] <- "Finding"
+pixar_films_clean$series[grepl("Monsters", pixar_films_clean$film)] <- "Monsters, Inc."
+
+
+library(dplyr)
+
+series_summary <- pixar_films_clean %>%
+  filter(!is.na(series)) %>%
+  group_by(series) %>%
+  summarise(
+    titles = paste(film, collapse = "; "),
+    film_count = n()
+  )
+
+print(series_summary)
+
+```
+
+#### c)
+```{r message=FALSE, warning=FALSE}
+cinema_levels <- c( "A-", "A", "A+")
+
+public_response$cinema_score <- factor(public_response$cinema_score,
+                                       levels = cinema_levels,
+                                       ordered = TRUE)
+
+pixar_full <- merge(pixar_films_clean, public_response, by = "film", all.x= TRUE)
+
+```
+
+#### d)
+```{r message=FALSE, warning=FALSE}
+
+pixar_full$release_date <- as.Date(pixar_full$release_date)
+
+library(dplyr)
+
+series_films <- pixar_full %>%
+  filter(!is.na(series)) %>%   
+  arrange(series, release_date) %>%
+  group_by(series) %>%
+  mutate(title_ordered = factor(film, levels = unique(film)))
+
+colnames(series_films)
+
+head(pixar_full$rotten_tomatoes)
+
+colnames(public_response)
+
+
+library(ggplot2)
+ggplot(series_films, aes(x = series, y = rotten_tomatoes, fill = title_ordered)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
+  labs(
+    title = "Rotten Tomatoes Scores by Pixar Film Series",
+    x = "Film Series",
+    y = "Rotten Tomatoes Score",
+    fill = "Film Title"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
