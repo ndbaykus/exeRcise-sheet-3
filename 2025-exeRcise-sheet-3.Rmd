@@ -29,10 +29,7 @@ CONS: Takes up file space, doesn't work in the background
 
 #### a)
 
-https://github.com/ndbaykus/exeRcise-sheet-3.git
 
 #### b)
 
-git remote add origin https://github.com/ndbaykus/exeRcise-sheet-3.git
-git branch -M main
-git push -u origin main
+
